@@ -1,0 +1,26 @@
+[
+  {
+    "symbol": "000001.SZ",
+    "market": "CN_A",
+    "asset_type": "STOCK",
+    "name": "Ping An Bank"
+  },
+  {
+    "symbol": "00700.HK",
+    "market": "HK",
+    "asset_type": "STOCK",
+    "name": "Tencent"
+  },
+  {
+    "symbol": "AAPL",
+    "market": "US",
+    "asset_type": "STOCK",
+    "name": "Apple"
+  },
+  {
+    "symbol": "BTC-USD",
+    "market": "CRYPTO",
+    "asset_type": "CRYPTO",
+    "name": "Bitcoin"
+  }
+]
