@@ -3,16 +3,16 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "auto-invast"
+name = "auto-invest"
 version = "0.1.0"
 description = "A lightweight multi-market quantitative trading research system."
 readme = "README.md"
 requires-python = ">=3.9"
-authors = [{ name = "Auto Invast" }]
+authors = [{ name = "Auto Invest" }]
 dependencies = []
 
 [project.scripts]
-auto-invast-backtest = "auto_invest.apps.backtest_cli:main"
+auto-invest-backtest = "auto_invest.apps.backtest_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
