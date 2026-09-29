@@ -1,0 +1,74 @@
+name: invest-lab-research
+
+services:
+  quant-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.quant-api
+    image: invest-lab-quant-api:local
+    user: "${QUANT_LOCAL_UID:-1000}:${QUANT_LOCAL_GID:-1000}"
+    environment:
+      QUANT_API_CONTAINER: "1"
+      PYTHONUNBUFFERED: "1"
+    command:
+      - python
+      - -m
+      - quant_lab
+      - api
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8766"
+      - --reports
+      - reports/quant/latest
+    expose:
+      - "8766"
+    volumes:
+      - ./data/quant:/app/data/quant:ro
+      - ./reports/quant:/app/reports/quant:rw
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8766/api/dashboard', timeout=3).read()"
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  visualization:
+    build:
+      context: .
+      dockerfile: Dockerfile.visualization
+    image: invest-lab-visualization:local
+    environment:
+      VISUAL_DASHBOARD_CONTAINER: "1"
+      PYTHONUNBUFFERED: "1"
+    command:
+      - python
+      - -m
+      - visual_lab
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8765"
+      - --quant-api-base
+      - http://quant-api:8766
+    ports:
+      - "127.0.0.1:${QUANT_DASHBOARD_PORT:-8765}:8765"
+    depends_on:
+      quant-api:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8765/api/dashboard', timeout=3).read()"
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
