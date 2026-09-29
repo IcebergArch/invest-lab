@@ -1,0 +1,58 @@
+[
+  {
+    "event_id": "pboc.rrr.2022-04-15",
+    "title": "央行宣布 2022 年 4 月降准",
+    "category": "monetary_policy.rrr",
+    "announcement_at": "2022-04-15T18:14:39+08:00",
+    "time_precision": "minute",
+    "effective_date": "2022-04-25",
+    "source_url": "https://www.pbc.gov.cn/goutongjiaoliu/113456/113469/2025092212552480200/index.html",
+    "publication_certainty": "official_verified",
+    "availability_confidence": "date_verified",
+    "magnitude": -0.25,
+    "magnitude_unit": "percentage_point",
+    "co_announcements": ["部分不跨省经营城商行和农商行额外下调 0.25 个百分点"]
+  },
+  {
+    "event_id": "pboc.rrr.2023-09-14",
+    "title": "央行宣布 2023 年 9 月降准",
+    "category": "monetary_policy.rrr",
+    "announcement_at": "2023-09-14T18:20:00+08:00",
+    "time_precision": "minute",
+    "effective_date": "2023-09-15",
+    "source_url": "https://www.pbc.gov.cn/goutongjiaoliu/113456/113469/2025092212553497620/index.html",
+    "publication_certainty": "official_verified",
+    "availability_confidence": "date_verified",
+    "magnitude": -0.25,
+    "magnitude_unit": "percentage_point",
+    "co_announcements": []
+  },
+  {
+    "event_id": "pboc.bundle.2024-09-24",
+    "title": "2024 年 9 月 24 日金融支持政策发布会",
+    "category": "monetary_policy.policy_bundle",
+    "announcement_at": "2024-09-24",
+    "time_precision": "date",
+    "effective_date": "2024-09-27",
+    "source_url": "https://www.pbc.gov.cn/en/3688110/3688172/5188125/2025112114573374594/index.html",
+    "publication_certainty": "official_verified",
+    "availability_confidence": "date_verified",
+    "magnitude": -0.5,
+    "magnitude_unit": "rrr_percentage_point",
+    "co_announcements": ["7 天期逆回购利率下调 0.2 个百分点", "存量房贷利率与首付比例调整", "证券基金保险公司互换便利与股票回购增持再贷款", "同场另有金融监管和证监会政策表态"]
+  },
+  {
+    "event_id": "pboc.rrr.2025-05-07",
+    "title": "央行宣布 2025 年 5 月降准",
+    "category": "monetary_policy.rrr",
+    "announcement_at": "2025-05-07T10:00:00+08:00",
+    "time_precision": "minute",
+    "effective_date": "2025-05-15",
+    "source_url": "https://www.pbc.gov.cn/goutongjiaoliu/113456/113469/2025092212554653911/index.html",
+    "publication_certainty": "official_verified",
+    "availability_confidence": "date_verified",
+    "magnitude": -0.5,
+    "magnitude_unit": "percentage_point",
+    "co_announcements": ["汽车金融公司和金融租赁公司存款准备金率下调 5 个百分点", "同日上午发布股市支持和其他金融政策，无法单独归因"]
+  }
+]

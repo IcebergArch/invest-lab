@@ -1,0 +1,19 @@
+name: invest-lab-research
+
+services:
+  history-backfill:
+    build:
+      context: .
+      dockerfile: Dockerfile.history-backfill
+    image: invest-lab-history-backfill:local
+    user: "${QUANT_LOCAL_UID:-1000}:${QUANT_LOCAL_GID:-1000}"
+    environment:
+      PYTHONUNBUFFERED: "1"
+      BACKFILL_PYTHON: python
+      BACKFILL_INTERVAL_SECONDS: "3"
+      BACKFILL_BATCH_PAUSE_SECONDS: "30"
+    volumes:
+      - ./data/quant:/app/data/quant
+      - ./reports/quant:/app/reports/quant
+    stop_grace_period: 60s
+    restart: "no"

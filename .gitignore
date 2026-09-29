@@ -6,5 +6,15 @@ dist/
 build/
 *.egg-info/
 .venv/
+.venv-history/
 venv/
 .DS_Store
+*.sqlite3-wal
+*.sqlite3-shm
+data/quant/qlib-releases/
+data/quant/*.sqlite3
+reports/quant/
+backups/
+
+# generated dashboards
+dashboards/

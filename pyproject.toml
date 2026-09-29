@@ -13,6 +13,8 @@ dependencies = []
 
 [project.scripts]
 auto-invest-backtest = "auto_invest.apps.backtest_cli:main"
+auto-invest-serve = "auto_invest.apps.data_server:main"
+quant-lab = "quant_lab.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
