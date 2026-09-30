@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from quant_lab.cost_model import FEE_RATE_PER_SIDE
+
 import argparse
 import json
 import re
@@ -24,6 +26,8 @@ from quant_lab.pipeline import run_pipeline
 from quant_lab.research import get_strategy, research_report, write_research_report
 from quant_lab.strategy_registry import append_strategy_snapshot
 from quant_lab.storage import MarketStore
+from quant_lab.factor_store import FactorStore
+from quant_lab.factor_materialization import materialize_stock_factors
 from quant_lab.sync import sync_database
 from quant_lab.verification import build_verification_report, write_report
 from quant_lab.workflow import record_decision, review_decisions
@@ -58,6 +62,11 @@ def parser() -> argparse.ArgumentParser:
     sync.add_argument("--workers", type=int, default=4)
 
     commands.add_parser("status", help="查看数据覆盖")
+    factor_build = commands.add_parser("factor-build", help="显式计算并保存分析用历史日线因子")
+    factor_build.add_argument("--factor-db", help="默认与 --db 同目录的 factors.sqlite3")
+    factor_build.add_argument("--stock", action="append", help="已登记股票；不传则计算主库股票")
+    factor_build.add_argument("--date", type=date.fromisoformat, default=date.today())
+    factor_build.add_argument("--sessions", type=int, default=21)
     commands.add_parser("sources", help="查看数据源目录")
     bao_pool = commands.add_parser("baostock-universe", help="取得当前沪深在市股票清单快照；不含北交所")
     bao_pool.add_argument("--out", help="快照文件路径；默认保存带日期和哈希的文件")
@@ -74,13 +83,13 @@ def parser() -> argparse.ArgumentParser:
     research = commands.add_parser("research", help="生成回测、当日信号及来源报告")
     research.add_argument("strategy", choices=["sma-trend", "cross-sectional-momentum", "mean-reversion-zscore"])
     research.add_argument("--date", type=date.fromisoformat, help="信号截至日期；默认库内最新共同交易日")
-    research.add_argument("--cost-rate", type=float, default=0.001)
+    research.add_argument("--cost-rate", type=float, default=FEE_RATE_PER_SIDE)
     research.add_argument("--out", default="reports/quant/research.json")
     optimize = commands.add_parser("optimize", help="按北极星目标做历史训练段参数搜索并保存留出段结果")
     optimize.add_argument("strategy", choices=["all", "sma-trend", "cross-sectional-momentum",
                                                "mean-reversion-zscore"])
     optimize.add_argument("--date", type=date.fromisoformat, help="只读取截至该日的数据")
-    optimize.add_argument("--cost-rate", type=float, default=0.001)
+    optimize.add_argument("--cost-rate", type=float, default=FEE_RATE_PER_SIDE)
     optimize.add_argument("--out-dir", default="reports/quant/optimizations")
     forecast = commands.add_parser("forecast", help="滚动评估预测器；模型输出不产生交易信号")
     forecast.add_argument("--provider", choices=["random-walk", "momentum-20", "timesfm-2.5"],
@@ -215,6 +224,15 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 f"rows={row['rows']:<5} {row['first_date']}..{row['last_date']} "
                 f"source={row['source_id']}"
             )
+        return 0
+
+    if args.command == "factor-build":
+        factor_store = FactorStore(args.factor_db or Path(args.db).parent / "factors.sqlite3")
+        ids = args.stock or store.list_stock_ids()
+        for instrument_id in ids:
+            result = materialize_stock_factors(store, factor_store, instrument_id,
+                                               asof=args.date, sessions=args.sessions)
+            print(json.dumps(result, ensure_ascii=False))
         return 0
 
     if args.command == "verify":

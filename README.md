@@ -1,19 +1,23 @@
-# Auto Invest
+# 资本研究 · Invest Lab
+
+[2026-09-30 变更汇总](docs/change-summary-2026-09-30.md)说明共享因子、组合决策、综合时间轴、预测留痕和版本边界的实现进度。
 
 先看[行情、政策扰动与预测稳定性的一页结论](reports/quant/policy-behavior-brief-2026-09-29.md)：当前预测证据属于第 3 档，系统弃答，不把回顾性曲线当成稳定买卖信号。
 
+已建立[单策略与多函数策略的前瞻模拟池](docs/paper-portfolio.md)：日期化决策共同进入通用模拟成交和收益评估；均与同池等权持有对照。截至 2026-09-30，三个当前账户均有 1 个前瞻代理成交日，距离 126 日观察门槛仍很远；量化总览只读展示其验证进度。
+
 ## Git 与本地数据
 
-Git 保存源码、配置、测试、文档和经审核的政策事件清单。行情 SQLite、Qlib 历史发布包、运行报告及人工回执属于本地数据，保存在 `data/quant/`、`reports/quant/`，不随代码提交；上面的实测报告链接需在本机生成或恢复数据包后才能打开。整理 Git 不会删除这些文件。
+Git 保存源码、配置、测试、文档、经审核的事件清单及少量离线核验所需的官方附件。行情 SQLite、Qlib 历史发布包、运行报告、人工回执和回测逐笔证据属于本地数据，保存在 `data/quant/`、`reports/quant/`、`studies/`，不随代码提交；上面的实测报告链接需在本机生成或恢复数据包后才能打开。整理 Git 不会删除这些文件。
 
-数据较大时可生成一个包含两目录的 ZIP。脚本会对正在使用的 SQLite 建立一致性备份，保留原文件，并在包内写入文件大小与 SHA-256 清单：
+数据较大时可生成包含 `data/quant/`、`reports/quant/`、`studies/` 和 `policies/` 的 ZIP。策略配置随包保存，便于对齐实验上下文。脚本会对正在使用的 SQLite 建立一致性备份，保留原文件，并在包内写入文件大小与 SHA-256 清单：
 
 ```bash
 python3 scripts/package-quant-data.py
 python3 scripts/package-quant-data.py --verify backups/<生成的文件名>.zip
 ```
 
-ZIP 默认保存在被 Git 忽略的 `backups/`，可由你自行复制到 iCloud Drive；项目不会自动上传，也不把大数据包纳入 Git。要迁移到另一份项目，先在空目录解包，再将其中的 `data/quant/` 和 `reports/quant/` 放到目标项目；这些目录包含实验记录和人工回执，应按本地个人数据保存。本次完整包的文件名与校验值见[本地数据快照](docs/data-archive.md)。
+ZIP 默认保存在被 Git 忽略的 `backups/`，可由你自行复制到 iCloud Drive；项目不会自动上传，也不把大数据包纳入 Git。要迁移到另一份项目，先在空目录解包，再按[本地数据快照](docs/data-archive.md)的恢复步骤对齐四个目录；恢复 `policies/` 前须核对代码版本和账户冻结哈希。这些目录包含实验记录和人工回执，应按本地个人数据保存。
 
 ## 本地可视化服务与量化系统
 
@@ -41,6 +45,10 @@ ZIP 默认保存在被 Git 忽略的 `backups/`，可由你自行复制到 iClou
 ```
 
 打开 [研究空间](http://127.0.0.1:8765/#tab-market) 或 [量化空间](http://127.0.0.1:8765/#quant-overview)；右上角切换空间，左侧显示当前空间的模块。前端修改会自动更新；修改 Python 服务后按 `Ctrl+C`，再运行同一命令。页面、量化 API、可视化桥接分别绑定本机 8765、8766、8767；可通过脚本的 `--port`、`--quant-port`、`--bridge-port` 改端口。此命令不执行行情同步或历史回填。
+
+个股页的[综合时间轴](docs/analysis-timeline.md)可在同一股价图启停因子、政策、中证指数调样、公司定期报告、策略信号和规则持仓图层；每个事件保留原始日期、图上交易日、已知生效时间及出处。当前只核实沪深 300 的 2021 年 6 月调样和洛阳钼业 2026 年 6 月调入中证 A50，公司报告只人工登记三只关注股各一份 2026 年一季报和半年报，不代表完整公告或指数成分历史。
+
+[预测留痕与策略版本](docs/forecast-evidence-and-lifecycle.md)记录类型识别、按类型启用预测/决策规则、全已入库股票的手动预测捕获及后续事实核验，并明确 dev、pre_online、online 的冻结和准出边界。
 
 需要 Docker 环境时仍可手动使用：
 
@@ -73,7 +81,7 @@ python3 scripts/publish-qlib-summary.py \
 
 ## 简版量化数据闭环（新）
 
-系统按**数据采集层 → 数据存储层 → 实验系统 → 应用层**四层组织。多来源记录通过规范化日线契约保留价格口径、单位和采集血缘；因子库和策略库向离线策略引擎提供版本化定义，回测引擎与优化器输出不可变实验记录；研究系统与量化系统共同消费这些记录。在线策略引擎是下一阶段扩展，当前控制台的运行按钮只触发离线任务。完整边界见[系统架构](docs/system-architecture.md)与[数据规范化流水线](docs/data-pipeline.md)。
+系统按**数据采集层 → 数据存储层 → 实验系统 → 应用层**四层组织。多来源记录通过规范化日线契约保留价格口径、单位和采集血缘；因子定义与[因子观测存储](docs/shared-factor-store.md)供分析和量化共用，分析解释个股变化，量化以点时合格的因子供决策函数与预算使用；回测引擎与优化器输出不可变实验记录。在线策略引擎是下一阶段扩展，当前控制台的运行按钮只触发离线任务。完整边界见[系统架构](docs/system-architecture.md)与[数据规范化流水线](docs/data-pipeline.md)。
 
 最小闭环一条命令（已有本地数据时可离线运行）：
 
@@ -87,7 +95,7 @@ PYTHONPATH=src python3 -m quant_lab run
 
 当前分析主库只有四只股票，所以全市场个股名单会被数据覆盖门槛阻断；不能把重点股票的回测胜负当作 A 股选股能力。现有行业筛法的初步历史检验也没有显示相对五条主线等权基线的优势。详见 [`docs/backtest-evaluation.md`](docs/backtest-evaluation.md) 与 [`docs/quant-roadmap.md`](docs/quant-roadmap.md)。
 
-量化空间的三套重点股策略现已按同一股票池、0.1% 成本和同一数据截止日分别归档。北极星分数是回测优化的目标：年化收益差与最大回撤差各占 50%，同池等权持有为 5.0 分，范围 0.0–10.0、保留一位小数。分数只描述历史试验，不替代独立前瞻验证。按时间顺序训练和历史留出段运行参数搜索：
+量化空间的三套重点股策略历史归档保留原费用口径；当前研究与模拟统一按同一股票池、买卖各 0.05% 费用和同一数据截止日计算。北极星分数是回测优化的目标：年化收益差与最大回撤差各占 50%，同池等权持有为 5.0 分，范围 0.0–10.0、保留一位小数。分数只描述历史试验，不替代独立前瞻验证。按时间顺序训练和历史留出段运行参数搜索：
 
 ```bash
 PYTHONPATH=src python3 -m quant_lab optimize all --date 2026-09-29
@@ -272,3 +280,5 @@ PYTHONPATH=src python3 -m auto_invest.apps.economy_dashboard \
 - 接入 AkShare/Tushare、IBKR、币安等真实数据适配器。
 - 增加事件驱动撮合、订单簿、风控和组合优化模块。
 - 增加因子研究、特征仓库和 walk-forward 验证。
+
+暂定组合比较政策及 2021 年后随机入场实验见 [docs/random-entry-baseline.md](docs/random-entry-baseline.md)。七候选筛查、沪深300月度快照宽池压力测试、[36 股原价公司行动重放](docs/raw-action-aware-later-stress.md)与[不按信号筛日的日历随机复核](docs/unconditional-random-entry-stress.md)均未证明策略稳定；[2021 锚定股票池审计](docs/qlib-2021-anchor-pool-audit.md)量化了未来完整行情筛选排除的停牌及退出样本，[停牌约束重放](docs/qlib-2021-anchor-halt-replay.md)把其中 500 个窗口补出代理结果。[终止交易审计](docs/qlib-2021-anchor-terminal-exit.md)确认 303 个固定三股窗口的期初买入不可执行；[决策日候补覆盖检查](docs/qlib-2021-anchor-asof-reserve-coverage.md)将其降到 1 个，[原价回放](docs/qlib-2021-anchor-asof-reserve-replay.md)则在同一 6,144 个窗口中取得 5,879 个条件代理结果、265 个未知，仍未证明策略稳定。尚无未来交易日验证；该发布包成分日期与官方生效日存在已核实偏差，来源与缺口见 [沪深300官方调样审计](docs/csi300-official-source-audit.md)。新增日线候选因子与高频数据门槛见 [docs/factor-research-v2.md](docs/factor-research-v2.md)。

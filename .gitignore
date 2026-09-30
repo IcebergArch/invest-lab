@@ -16,5 +16,13 @@ data/quant/*.sqlite3
 reports/quant/
 backups/
 
+# Generated experiment evidence is shipped in the data ZIP. Keep the small
+# audited sources required by the analysis timeline and offline tests in Git.
+studies/*
+!studies/random-entry-baseline-v1/
+studies/random-entry-baseline-v1/*
+!studies/random-entry-baseline-v1/csi300-official-2021-06-delta-audit-v1.json
+!studies/random-entry-baseline-v1/official-sources/
+
 # generated dashboards
 dashboards/

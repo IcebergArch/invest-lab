@@ -19,6 +19,20 @@ function BacktestFacts({ title, metrics }: { title: string; metrics?: BacktestMe
   </>;
 }
 
+function factorValue(value: number | null | undefined, unit: string, factorId: string): string {
+  if (!finite(value)) return '—';
+  if (factorId === 'momentum' || unit === 'return_fraction' || unit === 'per_session_volatility_fraction') return percent(value);
+  if (unit === 'price') return yuan(value);
+  return value.toLocaleString('zh-CN', { maximumSignificantDigits: 5 });
+}
+
+const FACTOR_LABELS: Record<string, string> = {
+  overnight_gap: '隔夜跳空', intraday_return: '日内收益',
+  rolling_range_volatility: '区间波动', relative_volume: '相对成交量',
+  relative_amount: '相对成交额', amihud_illiquidity: '成交额不流动性',
+  momentum: '价格动量', sma: '收盘均线', zscore: '价格标准分',
+};
+
 function DecisionCard({ report, isQlib }: { report: StockAnalysis; isQlib: boolean }) {
   const decision = report.decision;
   const source = Array.isArray(report.sources) ? report.sources[0] : undefined;
@@ -141,6 +155,21 @@ function StockReport({ report }: { report: StockAnalysis }) {
           <Fact label="近 20 日平均成交额" value={finite(risk?.metrics?.avg_amount_20d_cny) ? `${(risk.metrics.avg_amount_20d_cny / 100_000_000).toFixed(2)} 亿元` : '不可用'} />
         </div>
         {Array.isArray(risk?.flags) && risk.flags.length > 0 && <ul className="simple-list">{risk.flags.map((flag, index) => <li key={index}>{flag}</li>)}</ul>}
+      </section>
+      <section className="card report-block">
+        <h3>特征因子观察</h3>
+        {report.factor_insights?.length ? <>
+          <p className="sub">同一因子版本和价格口径下的最近两次观测；变化仅用于解释，不等于买卖信号。</p>
+          <div className="table-wrap"><table><thead><tr><th>因子</th><th>日期</th><th>数值</th><th>较上次变化</th></tr></thead><tbody>
+            {report.factor_insights.map(item => <tr key={`${item.factor_id}:${item.version}:${JSON.stringify(item.parameters)}:${item.price_basis}`}>
+              <td>{FACTOR_LABELS[item.factor_id] ?? item.factor_id}{Object.values(item.parameters).length ? `（${Object.values(item.parameters)[0]} 日）` : ''} <small>{item.version}</small></td>
+              <td>{item.asof}</td>
+              <td>{item.status === 'missing_input' ? '缺少输入' : item.status === 'insufficient_history' ? '历史不足' : factorValue(item.value, item.unit, item.factor_id)}</td>
+              <td>{factorValue(item.change, item.unit, item.factor_id)}</td>
+            </tr>)}
+          </tbody></table></div>
+          <p className="helper">来源：{report.factor_insights[0].source_id} · 价格口径：{report.factor_insights[0].price_basis}；{report.factor_insights.some(item => item.availability_evidence === 'retrospective') ? '含事后归档数据，不能证明历史决策当时可得。' : '可得时点以各条来源记录为准。'}</p>
+        </> : <p className="sub">暂无已保存因子观测。因子材料需由数据侧显式生成；本报告仍展示上方原有走势与风险指标。</p>}
       </section>
       <section className="card report-block">
         <h3>预测检验</h3>

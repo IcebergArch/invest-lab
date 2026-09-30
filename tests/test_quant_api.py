@@ -476,8 +476,14 @@ class QuantAPIContractTest(unittest.TestCase):
         self.assertEqual("available", observed["equal-weight-hold"]["backtest"]["status"])
         self.assertEqual("implemented_unvalidated",
                          observed["cross-sectional-momentum"]["status"])
-        self.assertEqual({"sma", "momentum", "zscore"},
-                         {item["factor_id"] for item in body["factors"]})
+        factor_rows = {item["factor_id"]: item for item in body["factors"]}
+        self.assertTrue({"sma", "momentum", "zscore", "overnight_gap",
+                         "amihud_illiquidity", "ofi", "queue_imbalance"} <= set(factor_rows))
+        self.assertEqual("data_required", factor_rows["ofi"]["availability_status"])
+        self.assertFalse(factor_rows["amihud_illiquidity"]["active_for_decision"])
+        rule_rows = {item["rule_id"]: item for item in body["rules"]}
+        self.assertEqual("research_only_unvalidated",
+                         rule_rows["gap_followthrough"]["deployment_status"])
         self.assertTrue(all("equity_curve" not in item["backtest"]
                             for item in body["strategies"]))
         file = next(directory.rglob("*.json"))

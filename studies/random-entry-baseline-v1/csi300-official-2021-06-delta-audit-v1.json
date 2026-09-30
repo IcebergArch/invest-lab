@@ -1,0 +1,980 @@
+{
+  "study_version": "csi300-official-2021-06-delta-audit-v1",
+  "status": "verified_single_scheduled_delta_only",
+  "full_daily_pit_universe_confirmed": false,
+  "actual_execution_confirmed": false,
+  "notice_url": "https://www.csindex.com.cn/#/about/newsDetail?id=12470",
+  "corroborating_sse_notice_url": "https://www.sse.com.cn/market/sseindex/diclosure/c/c_20210528_5476672.shtml",
+  "attachment_sources": {
+    "2021-06-01": {
+      "url": "https://oss-ch.csindex.com.cn/static/html/csindex/public/uploads/indices/info/files/20210601/1622509386248149.xlsx",
+      "relative_path": "studies/random-entry-baseline-v1/official-sources/2021-06-01-index-adjustments.xlsx",
+      "sha256": "ea291da157e677490e8d7287f1fa33aa17f69665e76fe6b71b295b038b360e54"
+    },
+    "2021-06-10": {
+      "url": "https://oss-ch.csindex.com.cn/static/html/csindex/public/uploads/indices/info/files/20210610/1623319091660435.xlsx",
+      "relative_path": "studies/random-entry-baseline-v1/official-sources/2021-06-10-index-adjustments.xlsx",
+      "sha256": "07e8c58d5f02cbaaf5e5b4a98f7c541208218d7a3de9b9627fbff37f31770a07"
+    }
+  },
+  "two_attachment_versions_identical_for_csi300": true,
+  "official_change": {
+    "调入": [
+      {
+        "code": "000800",
+        "symbol": "SZ000800",
+        "name": "一汽解放"
+      },
+      {
+        "code": "300274",
+        "symbol": "SZ300274",
+        "name": "阳光电源"
+      },
+      {
+        "code": "300450",
+        "symbol": "SZ300450",
+        "name": "先导智能"
+      },
+      {
+        "code": "300558",
+        "symbol": "SZ300558",
+        "name": "贝达药业"
+      },
+      {
+        "code": "300595",
+        "symbol": "SZ300595",
+        "name": "欧普康视"
+      },
+      {
+        "code": "300677",
+        "symbol": "SZ300677",
+        "name": "英科医疗"
+      },
+      {
+        "code": "600079",
+        "symbol": "SH600079",
+        "name": "人福医药"
+      },
+      {
+        "code": "600132",
+        "symbol": "SH600132",
+        "name": "重庆啤酒"
+      },
+      {
+        "code": "600143",
+        "symbol": "SH600143",
+        "name": "金发科技"
+      },
+      {
+        "code": "600426",
+        "symbol": "SH600426",
+        "name": "华鲁恒升"
+      },
+      {
+        "code": "600521",
+        "symbol": "SH600521",
+        "name": "华海药业"
+      },
+      {
+        "code": "601799",
+        "symbol": "SH601799",
+        "name": "星宇股份"
+      },
+      {
+        "code": "601995",
+        "symbol": "SH601995",
+        "name": "中金公司"
+      },
+      {
+        "code": "603233",
+        "symbol": "SH603233",
+        "name": "大参林"
+      },
+      {
+        "code": "603338",
+        "symbol": "SH603338",
+        "name": "浙江鼎力"
+      },
+      {
+        "code": "603517",
+        "symbol": "SH603517",
+        "name": "绝味食品"
+      },
+      {
+        "code": "603659",
+        "symbol": "SH603659",
+        "name": "璞泰来"
+      },
+      {
+        "code": "603806",
+        "symbol": "SH603806",
+        "name": "福斯特"
+      },
+      {
+        "code": "603882",
+        "symbol": "SH603882",
+        "name": "金域医学"
+      },
+      {
+        "code": "603939",
+        "symbol": "SH603939",
+        "name": "益丰药房"
+      },
+      {
+        "code": "688111",
+        "symbol": "SH688111",
+        "name": "金山办公"
+      },
+      {
+        "code": "688126",
+        "symbol": "SH688126",
+        "name": "沪硅产业-U"
+      },
+      {
+        "code": "688169",
+        "symbol": "SH688169",
+        "name": "石头科技"
+      },
+      {
+        "code": "688363",
+        "symbol": "SH688363",
+        "name": "华熙生物"
+      },
+      {
+        "code": "688396",
+        "symbol": "SH688396",
+        "name": "华润微"
+      }
+    ],
+    "调出": [
+      {
+        "code": "000627",
+        "symbol": "SZ000627",
+        "name": "天茂集团"
+      },
+      {
+        "code": "000671",
+        "symbol": "SZ000671",
+        "name": "阳光城"
+      },
+      {
+        "code": "000723",
+        "symbol": "SZ000723",
+        "name": "美锦能源"
+      },
+      {
+        "code": "000961",
+        "symbol": "SZ000961",
+        "name": "中南建设"
+      },
+      {
+        "code": "002146",
+        "symbol": "SZ002146",
+        "name": "荣盛发展"
+      },
+      {
+        "code": "002422",
+        "symbol": "SZ002422",
+        "name": "科伦药业"
+      },
+      {
+        "code": "002958",
+        "symbol": "SZ002958",
+        "name": "青农商行"
+      },
+      {
+        "code": "600004",
+        "symbol": "SH600004",
+        "name": "白云机场"
+      },
+      {
+        "code": "600027",
+        "symbol": "SH600027",
+        "name": "华电国际"
+      },
+      {
+        "code": "600066",
+        "symbol": "SH600066",
+        "name": "宇通客车"
+      },
+      {
+        "code": "600068",
+        "symbol": "SH600068",
+        "name": "葛洲坝"
+      },
+      {
+        "code": "600177",
+        "symbol": "SH600177",
+        "name": "雅戈尔"
+      },
+      {
+        "code": "600208",
+        "symbol": "SH600208",
+        "name": "新湖中宝"
+      },
+      {
+        "code": "600271",
+        "symbol": "SH600271",
+        "name": "航天信息"
+      },
+      {
+        "code": "600297",
+        "symbol": "SH600297",
+        "name": "广汇汽车"
+      },
+      {
+        "code": "600369",
+        "symbol": "SH600369",
+        "name": "西南证券"
+      },
+      {
+        "code": "600390",
+        "symbol": "SH600390",
+        "name": "五矿资本"
+      },
+      {
+        "code": "600487",
+        "symbol": "SH600487",
+        "name": "亨通光电"
+      },
+      {
+        "code": "600498",
+        "symbol": "SH600498",
+        "name": "烽火通信"
+      },
+      {
+        "code": "600637",
+        "symbol": "SH600637",
+        "name": "东方明珠"
+      },
+      {
+        "code": "600998",
+        "symbol": "SH600998",
+        "name": "九州通"
+      },
+      {
+        "code": "601117",
+        "symbol": "SH601117",
+        "name": "中国化学"
+      },
+      {
+        "code": "601198",
+        "symbol": "SH601198",
+        "name": "东兴证券"
+      },
+      {
+        "code": "601577",
+        "symbol": "SH601577",
+        "name": "长沙银行"
+      },
+      {
+        "code": "603156",
+        "symbol": "SH603156",
+        "name": "养元饮品"
+      }
+    ],
+    "备选名单": [
+      {
+        "code": "600298",
+        "symbol": "SH600298",
+        "name": "安琪酵母",
+        "rank": 1
+      },
+      {
+        "code": "300661",
+        "symbol": "SZ300661",
+        "name": "圣邦股份",
+        "rank": 2
+      },
+      {
+        "code": "002791",
+        "symbol": "SZ002791",
+        "name": "坚朗五金",
+        "rank": 3
+      },
+      {
+        "code": "601966",
+        "symbol": "SH601966",
+        "name": "玲珑轮胎",
+        "rank": 4
+      },
+      {
+        "code": "000987",
+        "symbol": "SZ000987",
+        "name": "越秀金控",
+        "rank": 5
+      },
+      {
+        "code": "601865",
+        "symbol": "SH601865",
+        "name": "福莱特",
+        "rank": 6
+      },
+      {
+        "code": "002064",
+        "symbol": "SZ002064",
+        "name": "华峰化学",
+        "rank": 7
+      },
+      {
+        "code": "002459",
+        "symbol": "SZ002459",
+        "name": "晶澳科技",
+        "rank": 8
+      },
+      {
+        "code": "000301",
+        "symbol": "SZ000301",
+        "name": "东方盛虹",
+        "rank": 9
+      },
+      {
+        "code": "002920",
+        "symbol": "SZ002920",
+        "name": "德赛西威",
+        "rank": 10
+      },
+      {
+        "code": "300012",
+        "symbol": "SZ300012",
+        "name": "华测检测",
+        "rank": 11
+      },
+      {
+        "code": "300496",
+        "symbol": "SZ300496",
+        "name": "中科创达",
+        "rank": 12
+      },
+      {
+        "code": "603345",
+        "symbol": "SH603345",
+        "name": "安井食品",
+        "rank": 13
+      },
+      {
+        "code": "601898",
+        "symbol": "SH601898",
+        "name": "中煤能源",
+        "rank": 14
+      },
+      {
+        "code": "002568",
+        "symbol": "SZ002568",
+        "name": "百润股份",
+        "rank": 15
+      }
+    ]
+  },
+  "monthly_release_mismatch": {
+    "official_effective_after_close": "2021-06-11",
+    "official_first_effective_trading_date": "2021-06-15",
+    "qlib_switch_date": "2021-06-30",
+    "lagged_trading_dates": [
+      "2021-06-15",
+      "2021-06-16",
+      "2021-06-17",
+      "2021-06-18",
+      "2021-06-21",
+      "2021-06-22",
+      "2021-06-23",
+      "2021-06-24",
+      "2021-06-25",
+      "2021-06-28",
+      "2021-06-29"
+    ],
+    "lagged_trading_session_count": 11,
+    "all_25_entering_names_absent_during_lag": true,
+    "all_25_exiting_names_still_present_during_lag": true,
+    "qlib_delta_matches_official_25_names_at_switch": true,
+    "qlib_snapshot_members_on_effective_after_close": [
+      "SH600000",
+      "SH600004",
+      "SH600009",
+      "SH600010",
+      "SH600011",
+      "SH600015",
+      "SH600016",
+      "SH600018",
+      "SH600019",
+      "SH600025",
+      "SH600027",
+      "SH600028",
+      "SH600029",
+      "SH600030",
+      "SH600031",
+      "SH600036",
+      "SH600048",
+      "SH600050",
+      "SH600061",
+      "SH600066",
+      "SH600068",
+      "SH600085",
+      "SH600104",
+      "SH600109",
+      "SH600111",
+      "SH600115",
+      "SH600118",
+      "SH600150",
+      "SH600161",
+      "SH600176",
+      "SH600177",
+      "SH600183",
+      "SH600196",
+      "SH600208",
+      "SH600233",
+      "SH600271",
+      "SH600276",
+      "SH600297",
+      "SH600299",
+      "SH600309",
+      "SH600332",
+      "SH600340",
+      "SH600346",
+      "SH600352",
+      "SH600362",
+      "SH600369",
+      "SH600383",
+      "SH600390",
+      "SH600406",
+      "SH600436",
+      "SH600438",
+      "SH600482",
+      "SH600487",
+      "SH600489",
+      "SH600498",
+      "SH600519",
+      "SH600522",
+      "SH600547",
+      "SH600570",
+      "SH600584",
+      "SH600585",
+      "SH600588",
+      "SH600600",
+      "SH600606",
+      "SH600637",
+      "SH600655",
+      "SH600660",
+      "SH600690",
+      "SH600703",
+      "SH600705",
+      "SH600741",
+      "SH600745",
+      "SH600760",
+      "SH600763",
+      "SH600795",
+      "SH600809",
+      "SH600837",
+      "SH600845",
+      "SH600848",
+      "SH600872",
+      "SH600886",
+      "SH600887",
+      "SH600893",
+      "SH600900",
+      "SH600918",
+      "SH600919",
+      "SH600926",
+      "SH600958",
+      "SH600989",
+      "SH600998",
+      "SH600999",
+      "SH601006",
+      "SH601009",
+      "SH601012",
+      "SH601021",
+      "SH601066",
+      "SH601077",
+      "SH601088",
+      "SH601100",
+      "SH601108",
+      "SH601111",
+      "SH601117",
+      "SH601138",
+      "SH601155",
+      "SH601162",
+      "SH601166",
+      "SH601169",
+      "SH601186",
+      "SH601198",
+      "SH601211",
+      "SH601216",
+      "SH601225",
+      "SH601229",
+      "SH601231",
+      "SH601236",
+      "SH601238",
+      "SH601288",
+      "SH601318",
+      "SH601319",
+      "SH601328",
+      "SH601336",
+      "SH601360",
+      "SH601377",
+      "SH601390",
+      "SH601398",
+      "SH601555",
+      "SH601577",
+      "SH601600",
+      "SH601601",
+      "SH601607",
+      "SH601618",
+      "SH601628",
+      "SH601633",
+      "SH601658",
+      "SH601668",
+      "SH601669",
+      "SH601688",
+      "SH601696",
+      "SH601698",
+      "SH601727",
+      "SH601766",
+      "SH601788",
+      "SH601800",
+      "SH601808",
+      "SH601816",
+      "SH601818",
+      "SH601838",
+      "SH601857",
+      "SH601872",
+      "SH601877",
+      "SH601878",
+      "SH601881",
+      "SH601888",
+      "SH601899",
+      "SH601901",
+      "SH601916",
+      "SH601919",
+      "SH601933",
+      "SH601939",
+      "SH601985",
+      "SH601988",
+      "SH601989",
+      "SH601990",
+      "SH601998",
+      "SH603019",
+      "SH603087",
+      "SH603156",
+      "SH603160",
+      "SH603195",
+      "SH603259",
+      "SH603288",
+      "SH603369",
+      "SH603392",
+      "SH603501",
+      "SH603658",
+      "SH603799",
+      "SH603833",
+      "SH603899",
+      "SH603986",
+      "SH603993",
+      "SH688008",
+      "SH688009",
+      "SH688012",
+      "SH688036",
+      "SZ000001",
+      "SZ000002",
+      "SZ000063",
+      "SZ000066",
+      "SZ000069",
+      "SZ000100",
+      "SZ000157",
+      "SZ000166",
+      "SZ000333",
+      "SZ000338",
+      "SZ000425",
+      "SZ000538",
+      "SZ000568",
+      "SZ000596",
+      "SZ000625",
+      "SZ000627",
+      "SZ000651",
+      "SZ000656",
+      "SZ000661",
+      "SZ000671",
+      "SZ000703",
+      "SZ000708",
+      "SZ000723",
+      "SZ000725",
+      "SZ000728",
+      "SZ000768",
+      "SZ000776",
+      "SZ000783",
+      "SZ000786",
+      "SZ000858",
+      "SZ000860",
+      "SZ000876",
+      "SZ000895",
+      "SZ000938",
+      "SZ000961",
+      "SZ000963",
+      "SZ000977",
+      "SZ001979",
+      "SZ002001",
+      "SZ002007",
+      "SZ002008",
+      "SZ002024",
+      "SZ002027",
+      "SZ002032",
+      "SZ002044",
+      "SZ002049",
+      "SZ002050",
+      "SZ002120",
+      "SZ002129",
+      "SZ002142",
+      "SZ002146",
+      "SZ002153",
+      "SZ002157",
+      "SZ002179",
+      "SZ002202",
+      "SZ002230",
+      "SZ002236",
+      "SZ002241",
+      "SZ002252",
+      "SZ002271",
+      "SZ002304",
+      "SZ002311",
+      "SZ002352",
+      "SZ002371",
+      "SZ002384",
+      "SZ002410",
+      "SZ002414",
+      "SZ002415",
+      "SZ002422",
+      "SZ002456",
+      "SZ002460",
+      "SZ002463",
+      "SZ002475",
+      "SZ002493",
+      "SZ002508",
+      "SZ002555",
+      "SZ002558",
+      "SZ002594",
+      "SZ002600",
+      "SZ002601",
+      "SZ002602",
+      "SZ002607",
+      "SZ002624",
+      "SZ002673",
+      "SZ002714",
+      "SZ002736",
+      "SZ002739",
+      "SZ002773",
+      "SZ002812",
+      "SZ002821",
+      "SZ002841",
+      "SZ002916",
+      "SZ002938",
+      "SZ002939",
+      "SZ002945",
+      "SZ002958",
+      "SZ003816",
+      "SZ300003",
+      "SZ300014",
+      "SZ300015",
+      "SZ300033",
+      "SZ300059",
+      "SZ300122",
+      "SZ300124",
+      "SZ300136",
+      "SZ300142",
+      "SZ300144",
+      "SZ300347",
+      "SZ300408",
+      "SZ300413",
+      "SZ300433",
+      "SZ300498",
+      "SZ300529",
+      "SZ300601",
+      "SZ300628",
+      "SZ300676"
+    ]
+  },
+  "stress_source": {
+    "path": "studies/random-entry-baseline-v1/qlib-csi300-monthly-snapshot-stress-v4.json",
+    "sha256": "8cc7b9284baa735ce7aa6fe7baea07637f97fee94ae55b445b3f6aa0c83a8522",
+    "total_sampled_cases": 240
+  },
+  "affected_sampled_cases": [
+    {
+      "case_id": "da4fe98debf885707837",
+      "segment": "selection_history",
+      "horizon_sessions": 126,
+      "seed": 606,
+      "decision_date": "2021-06-25",
+      "old_selected": [
+        "SH600183",
+        "SH600276",
+        "SH600309",
+        "SH600383",
+        "SH600487",
+        "SH600703",
+        "SH600845",
+        "SH600900",
+        "SH601162",
+        "SH601198",
+        "SH601238",
+        "SH601319",
+        "SH601577",
+        "SH601838",
+        "SH603658",
+        "SZ000568",
+        "SZ002007",
+        "SZ002252",
+        "SZ002555",
+        "SZ002714"
+      ],
+      "official_delta_selected": [
+        "SH601162",
+        "SH603658",
+        "SZ000568",
+        "SH601319",
+        "SZ002555",
+        "SH601838",
+        "SZ002714",
+        "SH600845",
+        "SH600703",
+        "SZ300274",
+        "SZ002252",
+        "SH601238",
+        "SH600183",
+        "SH600383",
+        "SZ002007",
+        "SH600309",
+        "SH600900",
+        "SH600276",
+        "SH600872",
+        "SZ300677"
+      ],
+      "name_replacements": 3,
+      "old_selected_exiting_names": [
+        "SH600487",
+        "SH601198",
+        "SH601577"
+      ],
+      "new_selected_entering_names": [
+        "SZ300274",
+        "SZ300677"
+      ]
+    },
+    {
+      "case_id": "e371681cf85414d6d477",
+      "segment": "selection_history",
+      "horizon_sessions": 252,
+      "seed": 202,
+      "decision_date": "2021-06-22",
+      "old_selected": [
+        "SH600004",
+        "SH600085",
+        "SH600383",
+        "SH600482",
+        "SH600837",
+        "SH600845",
+        "SH601066",
+        "SH601658",
+        "SH601872",
+        "SZ000001",
+        "SZ000002",
+        "SZ000100",
+        "SZ000627",
+        "SZ000895",
+        "SZ000938",
+        "SZ002271",
+        "SZ002456",
+        "SZ002602",
+        "SZ002958",
+        "SZ300529"
+      ],
+      "official_delta_selected": [
+        "SZ000100",
+        "SZ000001",
+        "SH600837",
+        "SZ002602",
+        "SH600845",
+        "SZ002271",
+        "SZ000938",
+        "SH600383",
+        "SH603882",
+        "SH601872",
+        "SH601658",
+        "SZ002456",
+        "SH600085",
+        "SZ300529",
+        "SH601066",
+        "SZ000895",
+        "SZ000002",
+        "SH600482",
+        "SH600989",
+        "SH601888"
+      ],
+      "name_replacements": 3,
+      "old_selected_exiting_names": [
+        "SH600004",
+        "SZ000627",
+        "SZ002958"
+      ],
+      "new_selected_entering_names": [
+        "SH603882"
+      ]
+    }
+  ],
+  "affected_sampled_case_count": 2,
+  "one_delta_selected_pool_proxy_sensitivity": [
+    {
+      "case_id": "da4fe98debf885707837",
+      "decision_date": "2021-06-25",
+      "original_signal": {
+        "eligible_count": 19,
+        "active_count": 9,
+        "sma_target_gross": 0.8
+      },
+      "one_delta_corrected_signal": {
+        "eligible_count": 19,
+        "active_count": 9,
+        "sma_target_gross": 0.8
+      },
+      "policy_comparison": {
+        "sma_active_equal": {
+          "original_status": "priced_adjusted_close_proxy",
+          "original_proxy_return": 0.02262295763822042,
+          "one_delta_corrected_status": "priced_adjusted_close_proxy",
+          "one_delta_corrected_proxy_return": 0.06093692136788387,
+          "one_delta_corrected_first_failure": null
+        },
+        "sma_exposure_equal_20": {
+          "original_status": "not_priceable_or_unfilled",
+          "original_proxy_return": null,
+          "one_delta_corrected_status": "not_priceable_or_unfilled",
+          "one_delta_corrected_proxy_return": null,
+          "one_delta_corrected_first_failure": {
+            "reason": "unpriceable_held_close",
+            "date": "2021-11-29",
+            "symbol": "SH600900",
+            "decision_id": "da4fe98debf885707837:sma_exposure_equal_20:2021-11-26",
+            "order_id": null
+          }
+        },
+        "fixed_80_buy_hold_20": {
+          "original_status": "not_priceable_or_unfilled",
+          "original_proxy_return": null,
+          "one_delta_corrected_status": "not_priceable_or_unfilled",
+          "one_delta_corrected_proxy_return": null,
+          "one_delta_corrected_first_failure": {
+            "reason": "unpriceable_held_close",
+            "date": "2021-11-29",
+            "symbol": "SH600900",
+            "decision_id": "da4fe98debf885707837:fixed_80_buy_hold_20:2021-11-26",
+            "order_id": null
+          }
+        },
+        "cash": {
+          "original_status": "priced_adjusted_close_proxy",
+          "original_proxy_return": 0.0,
+          "one_delta_corrected_status": "priced_adjusted_close_proxy",
+          "one_delta_corrected_proxy_return": 0.0,
+          "one_delta_corrected_first_failure": null
+        }
+      }
+    },
+    {
+      "case_id": "e371681cf85414d6d477",
+      "decision_date": "2021-06-22",
+      "original_signal": {
+        "eligible_count": 19,
+        "active_count": 11,
+        "sma_target_gross": 0.8000000000000002
+      },
+      "one_delta_corrected_signal": {
+        "eligible_count": 19,
+        "active_count": 12,
+        "sma_target_gross": 0.7999999999999999
+      },
+      "policy_comparison": {
+        "sma_active_equal": {
+          "original_status": "priced_adjusted_close_proxy",
+          "original_proxy_return": 0.01207499599008055,
+          "one_delta_corrected_status": "priced_adjusted_close_proxy",
+          "one_delta_corrected_proxy_return": -0.08309810610094925,
+          "one_delta_corrected_first_failure": null
+        },
+        "sma_exposure_equal_20": {
+          "original_status": "priced_adjusted_close_proxy",
+          "original_proxy_return": -0.06565385496147735,
+          "one_delta_corrected_status": "priced_adjusted_close_proxy",
+          "one_delta_corrected_proxy_return": -0.08317580375405409,
+          "one_delta_corrected_first_failure": null
+        },
+        "fixed_80_buy_hold_20": {
+          "original_status": "priced_adjusted_close_proxy",
+          "original_proxy_return": -0.06806192060167915,
+          "one_delta_corrected_status": "priced_adjusted_close_proxy",
+          "one_delta_corrected_proxy_return": -0.0926669095936482,
+          "one_delta_corrected_first_failure": null
+        },
+        "cash": {
+          "original_status": "priced_adjusted_close_proxy",
+          "original_proxy_return": 0.0,
+          "one_delta_corrected_status": "priced_adjusted_close_proxy",
+          "one_delta_corrected_proxy_return": 0.0,
+          "one_delta_corrected_first_failure": null
+        }
+      }
+    }
+  ],
+  "qlib_source_lineage": {
+    "source_id": "investment_data_qlib_release",
+    "release": {
+      "archive_sha256": "sha256:73f17f04b8710809f2881e20c3322990b39ecddf376f4b0e6d0c9acd0a6dede5",
+      "archive_size_bytes": 566694784,
+      "dolt_commit": "94j4q311v0lsntqg3injet1je2tv5v62",
+      "image_digest": "sha256:499bf932b7b967b6e5a06d120577a3fbed9d4fcf851dc0f6a1564d052e129f4e",
+      "investment_data_commit": "b8c129b4d9b838f050eac8b1135111b3b79fc894",
+      "manifest_sha256": "sha256:fae8c6449820928da24975ec658edf7ce85910c7b2322dc56e7e71cb54100fa2",
+      "qlib_commit": "b87a2c294d364a33fb739359886acffe8ec907d1",
+      "tag": "2026-09-28",
+      "target_trade_date": "2026-09-28"
+    },
+    "published_index_sha256": "sha256:bec955fa44f6a0754bd48626b4e9b3a51b747a4ed9b553a564412a8bd1f04689",
+    "calendar_sha256": "sha256:9484f07ca8f08aefad26f6f88f180cbff82ce187b3bb9cdd254292657ed7dfd8",
+    "csi300_intervals_sha256": "sha256:c74ef7776a233d0b55044a729922060f85c8d5c6dbde66f2edf92f159c12247e",
+    "all_instruments_sha256": "sha256:3a1a057c9099d16400c0d47ee83cc39e752312cd9e2295b374cee1897128acc0",
+    "verified_feature_file_count": 1896,
+    "verified_feature_index_digest": "sha256:b4c67603d70d48cc0b556ec20c7d962f470eff7a42f358906d3470ff081caea2",
+    "csi300_source_symbol_count": 949,
+    "audited_sh_sz_symbol_count": 948,
+    "csi300_interval_count": 16198,
+    "excluded_pre_2021_source_anomalies": [
+      {
+        "symbol": "SHT00018",
+        "last_interval_end": "2007-01-03"
+      }
+    ],
+    "membership_provenance": {
+      "external_sources_checked_on": "2026-09-30",
+      "pinned_upstream_qlib_index_export_code": "https://raw.githubusercontent.com/chenditc/investment_data/b8c129b4d9b838f050eac8b1135111b3b79fc894/qlib/dump_index_weight.py",
+      "pinned_upstream_tushare_index_weight_collection_code": "https://raw.githubusercontent.com/chenditc/investment_data/b8c129b4d9b838f050eac8b1135111b3b79fc894/tushare/dump_index_weight.py",
+      "official_2021_csi300_change_notice": "https://www.sse.com.cn/market/sseindex/diclosure/c/c_20210528_5476672.shtml",
+      "fixed_release_local_lag_example": {
+        "official_change_effective_after_close": "2021-06-11",
+        "official_added_example": "SH688111",
+        "official_removed_example": "SH603156",
+        "release_2021_06_15_added_example_present": false,
+        "release_2021_06_15_removed_example_present": true,
+        "release_2021_06_30_added_example_present": true,
+        "release_2021_06_30_removed_example_present": false,
+        "release_set_difference_2021_06_10_to_06_15": 0,
+        "release_added_2021_06_29_to_06_30": 25,
+        "release_removed_2021_06_29_to_06_30": 25,
+        "calendar_sessions_2021_06_15_through_06_29": 11
+      }
+    }
+  },
+  "limitations": [
+    "Only one official scheduled adjustment is checked. No verified full initial 300-name list or all temporary/revised changes.",
+    "Official attachment dates are inferred from official paths; no independent publication timestamps were preserved.",
+    "The 2026 Qlib price and monthly-membership release is not historical point-in-time vintage.",
+    "Only selected fixed pools for two affected cases are rerun. Adjusted-close proxy outcomes are not fully corrected PIT or executable P&L."
+  ],
+  "generated_at": "2026-09-30T04:56:49.226286+00:00",
+  "script_sha256": "c9008f90b9b1dfbf34cc0928fc04f3cb41af5908cf15fc2b9c602af4637767e6"
+}

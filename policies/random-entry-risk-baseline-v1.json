@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "policy_id": "focus-three-sma-risk-baseline-v1",
+  "mode": "single",
+  "start_asof": "2026-09-29",
+  "universe": [
+    "stock:000338.SZ",
+    "stock:002475.SZ",
+    "stock:002714.SZ"
+  ],
+  "strategy_ids": [
+    "sma-trend"
+  ],
+  "budget": {
+    "max_gross_weight": 0.8,
+    "max_stock_weight": 0.35
+  },
+  "initial_cash": 100000,
+  "cost_rate": 0.0005,
+  "stress_cost_rate": 0.0015,
+  "buy_lot": 100,
+  "benchmark": "same-universe equal-weight buy-and-hold; random-entry risk-baseline study v4",
+  "validation": {
+    "min_forward_sessions": 126,
+    "require_positive_excess_return": true,
+    "require_no_worse_drawdown": true,
+    "require_stress_excess_return": true
+  },
+  "validation_status": "provisional_risk_baseline_research_only"
+}

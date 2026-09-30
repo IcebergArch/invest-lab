@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "policy_id": "focus-three-ensemble-equal-v2-five-bps",
+  "mode": "ensemble",
+  "start_asof": "2026-09-29",
+  "universe": [
+    "stock:000338.SZ",
+    "stock:002475.SZ",
+    "stock:002714.SZ"
+  ],
+  "strategy_ids": [
+    "sma-trend",
+    "cross-sectional-momentum",
+    "mean-reversion-zscore"
+  ],
+  "function_weights": {
+    "sma-trend": 1,
+    "cross-sectional-momentum": 1,
+    "mean-reversion-zscore": 1
+  },
+  "budget": {
+    "max_gross_weight": 0.8,
+    "max_stock_weight": 0.35
+  },
+  "initial_cash": 100000,
+  "cost_rate": 0.0005,
+  "stress_cost_rate": 0.0015,
+  "buy_lot": 100,
+  "benchmark": "same-universe equal-weight buy-and-hold",
+  "validation": {
+    "min_forward_sessions": 126,
+    "require_positive_excess_return": true,
+    "require_no_worse_drawdown": true,
+    "require_stress_excess_return": true
+  },
+  "validation_status": "experimental_not_approved_for_assistance"
+}

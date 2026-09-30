@@ -18,7 +18,7 @@ from quant_lab.stock_analysis import _metrics, _parse_cost, _risk, _trend
 from quant_lab.stock_chart import build_stock_chart
 
 
-ANALYSIS_CALENDAR_LIMIT = 256
+ANALYSIS_CALENDAR_LIMIT = 1600
 
 
 def _usable_close(row: dict[str, Any]) -> bool:
@@ -130,7 +130,7 @@ def analyze_qlib_stock(
         source["read_window_missing_or_invalid_close_rows"] = len(rows)
         report.update(
             status="no_bars",
-            reason="所读归档窗口内没有可用的复权收盘价；该窗口最多包含最近 256 个交易日历行。",
+            reason=f"所读归档窗口内没有可用的复权收盘价；该窗口最多包含最近 {ANALYSIS_CALENDAR_LIMIT} 个交易日历行。",
             summary="暂时无法生成价格走势报告。",
         )
         return report
@@ -193,7 +193,7 @@ def analyze_qlib_stock(
     )
     limitations = [
         "走势与价格风险只使用最新连续有效的 Qlib 复权收盘价；它不是实时行情或原始成交价。",
-        "全史只统计有效收盘数；走势计算仅用最近最多 256 个日历行，缺值会截断连续样本，较早历史质量未在此报告中核验。",
+        f"全史只统计有效收盘数；走势计算仅用最近最多 {ANALYSIS_CALENDAR_LIMIT} 个日历行，缺值会截断连续样本，较早历史质量未在此报告中核验。",
         "该 Release 是事后发布的数据，并非历史时点可得的股票池；本报告不提供荐股、预测或策略回测。",
         "Qlib 归档与主行情库保持隔离，不用于现有选股和回测。",
     ]
