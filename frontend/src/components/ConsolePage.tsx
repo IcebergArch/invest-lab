@@ -668,8 +668,14 @@ function StrategyManager({ data, onNavigate }: { data: ConsoleStatus; onNavigate
     </div>}
     {view === 'algorithms' && <AlgorithmRegistry data={data} onNavigate={onNavigate} />}
     {view === 'factors' && <div className="console-section"><SectionHeader title="因子库" subtitle="已登记计算定义及输入要求。登记不代表预测有效。" />
-      {factors.length ? <div className="table-wrap"><table><thead><tr><th>因子</th><th>版本</th><th>定义</th><th>输入</th><th>最低历史长度</th><th>输出单位</th></tr></thead><tbody>
-        {factors.map((factor, index) => <tr key={`${factor.factor_id}-${index}`}><td>{text(factor.factor_id)}</td><td>{text(factor.version)}</td><td className="console-description">{text(factor.description)}</td><td>{text(factor.input_field)}</td><td>{text(factor.minimum_history)}</td><td>{text(factor.output_unit)}</td></tr>)}
+      {data.factor_store?.status === 'ready' ? <div className="card">
+        <h3>共用因子观测</h3>
+        <p className="sub">最近快照截至 {text(data.factor_store.latest_asof, '未知')} · {count(data.factor_store.instrument_count)} 只股票 · {count(data.factor_store.latest_snapshot_observation_count)} 条观测</p>
+        <p>有效值 {count(data.factor_store.latest_snapshot_valid_count)} 条；缺少输入 {count(data.factor_store.latest_snapshot_missing_input_count)} 条；有首次可得时间证据 {count(data.factor_store.latest_snapshot_evidenced_availability_count)} 条。</p>
+        <p className="helper">此处统计每只股票最近保存的来源快照。旧快照仍留档，全部版本共 {count(data.factor_store.all_vintage_observation_count)} 条；有因子值不代表策略有效。</p>
+      </div> : <p className="helper">因子观测库{data.factor_store?.status === 'unavailable' ? '暂不可读取' : '尚未生成'}；下方仍可查看因子定义。</p>}
+      {factors.length ? <div className="table-wrap"><table><thead><tr><th>因子</th><th>版本</th><th>粒度</th><th>状态</th><th>定义</th><th>输入</th><th>最低历史长度</th><th>输出单位</th></tr></thead><tbody>
+        {factors.map((factor, index) => <tr key={`${factor.factor_id}-${index}`}><td>{text(factor.factor_id)}</td><td>{text(factor.version)}</td><td>{factor.frequency === "order_event" || factor.frequency === "order_book" || factor.frequency === "intraday" ? "日内" : "日线"}</td><td>{factor.availability_status === "data_required" ? "缺所需数据" : factor.research_status === "research_unvalidated" ? "研究待验证" : "已实现，未验证"}</td><td className="console-description">{text(factor.description)}{factor.research_reference && <div><a href={factor.research_reference} target="_blank" rel="noreferrer">原研究</a></div>}</td><td>{text(factor.input_field ?? factor.required_fields?.join(", "))}</td><td>{text(factor.minimum_history ?? (factor.availability_status === "data_required" ? "待数据" : "按窗口参数"))}</td><td>{text(factor.output_unit)}</td></tr>)}
       </tbody></table></div> : <EmptyState title="因子元数据不可读取"><p>当前没有可展示的因子定义。</p></EmptyState>}
     </div>}
     {view === 'rules' && <div className="console-section"><SectionHeader title="规则与验证进度" subtitle="查询建议和筛选规则单独记录；未回测的规则不混入策略收益。" />
@@ -783,6 +789,33 @@ function FeedbackManager({ data, onSaved, actions }: { data: ConsoleStatus; onSa
   </>;
 }
 
+function PaperPools({ data }: { data: ConsoleStatus }) {
+  const pools = Array.isArray(data.paper_pools?.pools) ? data.paper_pools.pools : [];
+  const labels: Record<string, string> = {
+    single_sma: '单策略 · SMA 趋势',
+    ensemble: '多函数组合 · 三策略',
+    risk_baseline: '风险基线 · SMA 三股组合',
+  };
+  return <div className="console-section" aria-label="策略前瞻模拟池">
+    <SectionHeader title="前瞻模拟与辅助门槛" subtitle="三个决策来源共用模拟成交口径；数值门槛通过后仍需人工复核。" badge="仅研究" />
+    <div className="grid two">{pools.map(pool => <article className="card console-data-card" key={pool.account_id || 'unknown'}>
+      <div className="console-rule-head"><h3>{labels[pool.account_id ?? ''] || text(pool.account_id, '模拟池')}</h3><span className="console-badge warning">{pool.assistance_status === 'human_review_candidate' ? '待人工复核' : pool.status === 'ready' ? '研究中' : '记录不可用'}</span></div>
+      {pool.status === 'ready' ? <>
+        <p className="console-context">截至 {text(pool.asof)} · 前瞻 {count(pool.observed_sessions)} / {count(pool.minimum_forward_sessions)} 个交易日 · 买卖各 {magnitudePercent(pool.cost_rate, 2)}</p>
+        <div className="console-metric-grid">
+          <div className="console-metric"><span>模拟收益</span><strong>{percent(pool.strategy_return, 2)}</strong></div>
+          <div className="console-metric"><span>同池等权</span><strong>{percent(pool.baseline_return, 2)}</strong></div>
+          {finite(pool.stress_strategy_return) && <div className="console-metric"><span>压力费率 {magnitudePercent(pool.stress_cost_rate, 2)}</span><strong>{percent(pool.stress_strategy_return, 2)}</strong></div>}
+        </div>
+        <p className="console-context">{text(pool.reason)}</p>
+        {pool.decision_sha256 && <small className="trace-id">决策哈希 {pool.decision_sha256.slice(0, 16)}…</small>}
+      </> : <p className="console-context">{text(pool.reason, '模拟池尚未建立。')}</p>}
+    </article>)}</div>
+    <Notice>模拟结果不等于真实成交；当前研究状态不生成个人买卖指令。{pools.length > 0 && pools.every(pool => pool.status === 'ready' && pool.observed_sessions === 1)
+      ? '三个账户仅有首个代理成交日，按同一收盘价开仓和估值；净值变化主要是开仓费用，尚无持仓后的价格路径。' : ''}</Notice>
+  </div>;
+}
+
 const moduleCopy: Record<QuantModule, { title: string; description: string; eyebrow: string }> = {
   overview: { title: '量化系统总览', description: '分模块查看已保存证据、任务状态和下一步入口。', eyebrow: 'SYSTEM OVERVIEW' },
   data: { title: '数据管理', description: '查看来源、库存、历史缺口和最近同步运行。', eyebrow: 'DATA MANAGEMENT' },
@@ -843,6 +876,7 @@ export default function ConsolePage({ module, onNavigate }: { module: QuantModul
   };
 
   const run = data?.published_run;
+  const latestSyncRun = data?.market_store?.latest_sync_runs?.[0];
   const activeTask = data?.tasks?.active;
   const latestTask = Array.isArray(data?.tasks?.recent) ? data.tasks.recent[0] : undefined;
   const actions: TaskActionProps = {
@@ -862,6 +896,7 @@ export default function ConsolePage({ module, onNavigate }: { module: QuantModul
         <div className="card mini-card"><div className="label">候选发布</div><div className="value">{count(run?.recommendation_count)} <small>只</small></div><div className="minor">{run?.recommendation_status === 'blocked_insufficient_evidence' ? '证据不足，发布受阻' : text(run?.recommendation_status, '状态未知')}</div></div>
         <div className="card mini-card"><div className="label">本地任务</div><div className="value">{activeTask ? '运行中' : data.tasks?.status === 'unavailable' ? '不可核验' : '当前无运行任务'}</div><div className="minor trace-id">{activeTask ? `Task ID：${text(activeTask.task_id)}` : latestTask ? `最近：${taskKind(latestTask.kind)} · ${taskState(latestTask.status)}` : '暂无任务记录'}</div></div>
       </div>
+      <PaperPools data={data} />
       <div className="console-section"><SectionHeader title="进入工作台" subtitle="每个模块仅显示其当前管理视图；状态与动作来自本地服务。" />
         <div className="console-shortcuts">
           {(['data', 'strategy', 'experiments', 'forecast', 'feedback'] as const).map(next => <button type="button" className="card console-shortcut" key={next} onClick={() => onNavigate(next)}><strong>{moduleCopy[next].title}</strong><span>{moduleCopy[next].description}</span><b aria-hidden="true">→</b></button>)}
@@ -869,7 +904,7 @@ export default function ConsolePage({ module, onNavigate }: { module: QuantModul
       </div>
       <div className="console-section"><SectionHeader title="模块状态" subtitle="研究发布、数据库存和实验记录属于不同证据口径。" />
         <div className="table-wrap"><table><thead><tr><th>模块</th><th>当前可读状态</th><th>时间或记录</th></tr></thead><tbody>
-          <tr><td>数据管理</td><td>{text(data.raw_data_inventory?.status, '未知')} · 主库 {count(data.market_store?.groups?.stock?.instrument_count)} 个代码</td><td>{when(data.raw_data_inventory?.snapshot_at)}</td></tr>
+          <tr><td>数据管理</td><td>主库 {count(data.market_store?.groups?.stock?.instrument_count)} 个股票代码 · 原始盘点 {text(data.raw_data_inventory?.status, '未知')}</td><td>最近同步 {when(latestSyncRun?.finished_at)}<small className="console-subline">盘点快照 {when(data.raw_data_inventory?.snapshot_at)}</small></td></tr>
           <tr><td>策略与因子</td><td>{count(data.strategies?.length)} 项策略 · {count(data.algorithm_components?.length)} 个算法组件 · {count(data.factors?.length)} 个因子</td><td>{count(data.strategy_archive?.record_count)} 份策略快照</td></tr>
           <tr><td>实验与回测</td><td>{count(data.experiments?.recent?.length)} 条实验 · {count(data.optimizations?.recent?.length)} 条优化</td><td>{latestTask ? `最近任务 ${text(latestTask.task_id)}` : '暂无任务'}</td></tr>
           <tr><td>预测评估</td><td>{text(data.forecast_experiments?.status, '未知')} · {count(data.forecast_stability?.latest?.length)} 个稳定性审计</td><td>仅回顾性研究</td></tr>

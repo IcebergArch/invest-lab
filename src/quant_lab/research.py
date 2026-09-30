@@ -1,6 +1,8 @@
 """Small reproducible EOD research flow over the stored close panel."""
 from __future__ import annotations
 
+from quant_lab.cost_model import FEE_RATE_PER_SIDE
+
 import json
 import hashlib
 from dataclasses import asdict, dataclass
@@ -54,7 +56,7 @@ def _reason(strategy: Strategy, values: list[float]) -> tuple[int, str]:
 
 
 def research_report(store: MarketStore, strategy_name: str, asof: Optional[date] = None,
-                    cost_rate: float = 0.001) -> dict[str, object]:
+                    cost_rate: float = FEE_RATE_PER_SIDE) -> dict[str, object]:
     strategy = get_strategy(strategy_name)
     ids = store.list_instrument_ids("focus_stock")
     if not ids:

@@ -26,6 +26,7 @@ services:
     volumes:
       - ./data/quant:/app/data/quant:ro
       - ./reports/quant:/app/reports/quant:rw
+      - ./studies/random-entry-baseline-v1:/app/studies/random-entry-baseline-v1:ro
     healthcheck:
       test:
         - CMD

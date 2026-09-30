@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "registry_id": "reviewed-company-disclosures-2026-09-30-v2",
+  "scope": "Six manually reviewed 2026 first-quarter and semiannual report documents for the initial watchlist. This is a sparse retrospective source list, not a complete announcement feed.",
+  "time_policy": "Only the public calendar date is evidenced; exact release time is unverified. Plot on the next observed trading day, never as a same-day tradable signal.",
+  "events": [
+    {
+      "event_id": "company-report:000977.SZ:2026-q1",
+      "instrument_id": "stock:000977.SZ",
+      "title": "浪潮信息 2026 年第一季度报告",
+      "disclosure_date": "2026-04-30",
+      "source_date_basis": "official_exchange_document_url_date",
+      "document_url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-04-30/70d730a7-b368-4b75-9350-8a2455851718.PDF",
+      "source_id": "szse_official_document",
+      "release_time_verified": false,
+      "document_identity_verified": true
+    },
+    {
+      "event_id": "company-report:002594.SZ:2026-q1",
+      "instrument_id": "stock:002594.SZ",
+      "title": "比亚迪 2026 年第一季度报告",
+      "disclosure_date": "2026-04-29",
+      "source_date_basis": "official_exchange_document_url_date",
+      "document_url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-04-29/3412b15e-4812-4410-8308-183b94f48105.PDF",
+      "source_id": "szse_official_document",
+      "release_time_verified": false,
+      "document_identity_verified": true
+    },
+    {
+      "event_id": "company-report:603993.SH:2026-q1-corrected",
+      "instrument_id": "stock:603993.SH",
+      "title": "洛阳钼业 2026 年第一季度报告（更正版）",
+      "disclosure_date": "2026-04-25",
+      "source_date_basis": "company_investor_relations_listing_date",
+      "document_url": "https://static.sse.com.cn/disclosure/listedinfo/announcement/c/new/2026-04-25/603993_20260425_MGMV.pdf",
+      "listing_url": "https://www.cmoc.com/html/InvestorMedia/Notics/2.html",
+      "source_id": "cmoc_investor_relations_and_sse_corrected_document",
+      "release_time_verified": false,
+      "document_identity_verified": true
+    },
+    {
+      "event_id": "company-report:000977.SZ:2026-h1",
+      "instrument_id": "stock:000977.SZ",
+      "title": "浪潮信息 2026 年半年度报告",
+      "disclosure_date": "2026-08-29",
+      "source_date_basis": "official_exchange_document_url_date",
+      "document_url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-29/d059fd42-397b-49ac-81a2-7a171787f946.PDF",
+      "source_id": "szse_official_document",
+      "release_time_verified": false,
+      "document_identity_verified": true
+    },
+    {
+      "event_id": "company-report:002594.SZ:2026-h1",
+      "instrument_id": "stock:002594.SZ",
+      "title": "比亚迪 2026 年半年度报告",
+      "disclosure_date": "2026-08-29",
+      "source_date_basis": "official_exchange_document_url_date",
+      "document_url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-29/56e933c9-717e-42bd-8c21-3a0a11b8d2d0.PDF",
+      "source_id": "szse_official_document",
+      "release_time_verified": false,
+      "document_identity_verified": true
+    },
+    {
+      "event_id": "company-report:603993.SH:2026-h1",
+      "instrument_id": "stock:603993.SH",
+      "title": "洛阳钼业 2026 年半年度报告",
+      "disclosure_date": "2026-08-20",
+      "source_date_basis": "company_investor_relations_listing_date",
+      "document_url": "https://www.sse.com.cn/disclosure/listedinfo/announcement/c/new/2026-08-20/603993_20260820_AS4C.pdf",
+      "listing_url": "https://www.cmoc.com/html/InvestorMedia/PerformanceReport/HalfYear/index.html",
+      "source_id": "cmoc_investor_relations_and_sse_document",
+      "release_time_verified": false,
+      "document_identity_verified": true
+    }
+  ]
+}

@@ -243,7 +243,37 @@ export interface AlgorithmComponent {
   source_url?: string | null;
 }
 
+export interface PaperPoolSummary {
+  account_id?: string;
+  status?: string;
+  asof?: string;
+  observed_sessions?: number;
+  minimum_forward_sessions?: number;
+  strategy_return?: number;
+  baseline_return?: number;
+  cost_rate?: number;
+  stress_cost_rate?: number | null;
+  stress_strategy_return?: number | null;
+  stress_baseline_return?: number | null;
+  assistance_status?: string;
+  reason?: string;
+  decision_sha256?: string | null;
+}
+
 export interface ConsoleStatus {
+  factor_store?: {
+    status?: 'ready' | 'missing' | 'unavailable';
+    store_version?: string;
+    instrument_count?: number;
+    latest_asof?: string | null;
+    latest_snapshot_observation_count?: number;
+    latest_snapshot_valid_count?: number;
+    latest_snapshot_missing_input_count?: number;
+    latest_snapshot_evidenced_availability_count?: number;
+    all_vintage_observation_count?: number;
+    reason?: string;
+  };
+  paper_pools?: { status?: string; pools?: PaperPoolSummary[] };
   status?: string;
   generated_at?: string;
   china_today?: string;
@@ -539,8 +569,14 @@ export interface ConsoleStatus {
     parameter_name?: string;
     minimum_history?: string;
     output_unit?: string;
+    frequency?: string;
+    required_fields?: string[];
+    availability_status?: string;
+    research_status?: string;
+    active_for_decision?: boolean;
+    research_reference?: string | null;
   }[];
-  rules?: { rule_id?: string; version?: string; backtest_status?: string; reason?: string }[];
+  rules?: { rule_id?: string; version?: string; backtest_status?: string; reason?: string; deployment_status?: string; factor_ids?: string[] }[];
   versions?: Record<string, string | null>;
 }
 
@@ -619,6 +655,9 @@ export interface StockChart {
     price_basis?: 'qfq_cny' | 'qlib_adjusted';
     model_id?: string;
     model_version?: string;
+    router_version?: string;
+    instrument_type?: string;
+    activated_decision_method?: string | null;
     asof?: string;
     validation?: {
       status?: 'passed' | 'failed' | 'research_only' | 'exploratory' | 'insufficient_data';
@@ -645,6 +684,27 @@ export interface StockAnalysis {
   summary?: string;
   decision?: StockDecision | null;
   chart?: StockChart | null;
+  analysis_timeline?: {
+    version: string;
+    status: string;
+    window?: { start: string; end: string };
+    layers: { category: 'factor' | 'policy' | 'index' | 'disclosure'; label: string; status: string; coverage: string }[];
+    events: {
+      event_id: string;
+      category: 'factor' | 'policy' | 'index' | 'disclosure';
+      title: string;
+      event_at: string;
+      event_time_kind: string;
+      anchor_date: string | null;
+      effective_at: string | null;
+      detail: string;
+      source_id: string;
+      source_url: string | null;
+      source_sha256: string | null;
+      input_sha256: string | null;
+      availability: string;
+    }[];
+  };
   research_record?: {
     status?: 'saved' | 'save_failed';
     record_id?: string;
@@ -676,6 +736,23 @@ export interface StockAnalysis {
     strategy_metrics?: BacktestMetrics;
     buy_hold_metrics?: BacktestMetrics;
   } | null;
+  factor_insights?: {
+    factor_id: string;
+    version: string;
+    parameters: Record<string, number | string>;
+    asof: string;
+    value: number | null;
+    status: 'ok' | 'insufficient_history' | 'missing_input';
+    previous_asof?: string | null;
+    previous_value?: number | null;
+    change?: number | null;
+    unit: string;
+    price_basis: string;
+    source_id: string;
+    source_snapshot_id: string;
+    availability_evidence: string;
+    input_sha256: string;
+  }[];
   sources?: {
     latest_source_id?: string;
     last_trade_date?: string;

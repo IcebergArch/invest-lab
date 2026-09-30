@@ -5,6 +5,8 @@ baselines, not a calibrated return estimate or a trading recommendation.
 """
 from __future__ import annotations
 
+from quant_lab.cost_model import FEE_RATE_PER_SIDE
+
 import hashlib
 import json
 import math
@@ -185,8 +187,8 @@ def _backtest(dates: list[date], closes: list[float], instrument_id: str) -> dic
             "reason": "少于 120 个收盘价，暂不运行单股策略示例回测。",
         }
     panel = {instrument_id: closes}
-    strategy = run_backtest(SmaTrendStrategy(), dates, panel, cost_rate=0.001)
-    hold = run_buy_and_hold(dates, panel, cost_rate=0.001)
+    strategy = run_backtest(SmaTrendStrategy(), dates, panel, cost_rate=FEE_RATE_PER_SIDE)
+    hold = run_buy_and_hold(dates, panel, cost_rate=FEE_RATE_PER_SIDE)
     return {
         "status": "historical_diagnostic_only",
         "strategy": "20/60 日均线趋势，空仓或持有该股",
@@ -195,7 +197,7 @@ def _backtest(dates: list[date], closes: list[float], instrument_id: str) -> dic
         "observations": len(dates),
         "strategy_metrics": dict(strategy.metrics),
         "buy_hold_metrics": dict(hold.metrics),
-        "cost_rate_per_turnover": 0.001,
+        "cost_rate_per_turnover": FEE_RATE_PER_SIDE,
         "execution_assumption": "收盘产生信号，下一交易日收盘价代理成交。",
         "independent_out_of_sample": False,
         "reason": "这是历史示例；规则未预先冻结并在未来新数据上独立验证。",

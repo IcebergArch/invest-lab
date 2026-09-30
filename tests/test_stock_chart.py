@@ -7,7 +7,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from quant_lab.stock_chart import build_stock_chart
+from quant_lab.stock_chart import HISTORY_LIMIT, build_stock_chart
 
 
 def days(count: int) -> list[date]:
@@ -42,7 +42,7 @@ class StockChartTest(unittest.TestCase):
             price_basis="qfq_cny", include_strategy_signals=True,
             include_research_forecast=True,
         )
-        self.assertEqual(120, len(chart["history"]))
+        self.assertEqual(len(calendar), len(chart["history"]))
         self.assertEqual(calendar[-1].isoformat(), chart["asof"])
         self.assertEqual("buy", chart["signals"][0]["kind"])
         positions = {point["date"]: point["position"] for point in chart["rule_position"]}
@@ -55,6 +55,16 @@ class StockChartTest(unittest.TestCase):
         self.assertEqual(list(range(1, 21)), [item["step"] for item in forecast["points"]])
         self.assertGreater(forecast["validation"]["sample_count"], 0)
         self.assertEqual("exploratory", forecast["validation"]["status"])
+
+    def test_loaded_history_is_bounded_for_multi_year_chart_range(self) -> None:
+        calendar = days(HISTORY_LIMIT + 20)
+        chart = build_stock_chart(
+            calendar, [10.0] * len(calendar), instrument_id="stock:603993.SH",
+            price_basis="qfq_cny", include_strategy_signals=False,
+            include_research_forecast=False,
+        )
+        self.assertEqual(HISTORY_LIMIT, len(chart["history"]))
+        self.assertEqual(calendar[-HISTORY_LIMIT].isoformat(), chart["history"][0]["date"])
 
     def test_only_prior_bars_can_affect_a_snapshot(self) -> None:
         calendar = days(200)

@@ -93,7 +93,7 @@ export default function App() {
     <a className="skip-link" href="#main-content" onClick={skipToContent}>跳到主要内容</a>
     <header className="mast">
       <div className="shell mast-inner topline">
-        <div className="brand"><span aria-hidden="true">◉</span>A 股研究台</div>
+        <div className="brand"><span aria-hidden="true">◉</span>资本研究</div>
         <div className="mast-actions">
           <div className="top-status"><span className="dot" aria-hidden="true" />
             <span>{space === 'quant' ? '本地量化系统 · 策略与任务状态' : loadError ? '报告读取失败' : loading ? '读取已生成报告…' : `本地报告 · 宽基截至 ${text(dashboard?.market.asof, '未知')}`}</span>

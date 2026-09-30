@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create and verify portable ZIP backups of the local quant data and reports.
+"""Create and verify portable ZIP backups of quant data, reports and studies.
 
 Examples:
     python3 scripts/package-quant-data.py
@@ -30,7 +30,7 @@ from urllib.parse import quote
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCES = (Path("data/quant"), Path("reports/quant"))
+SOURCES = (Path("data/quant"), Path("reports/quant"), Path("studies"), Path("policies"))
 SQLITE_SUFFIXES = {".sqlite", ".sqlite3", ".db"}
 STORED_SUFFIXES = {".gz", ".zip", ".xz", ".bz2", ".zst", ".jpg", ".jpeg", ".png", ".pdf"}
 CHUNK_BYTES = 1024 * 1024
@@ -128,7 +128,8 @@ def verify_archive(path: Path) -> dict[str, object]:
     """Read every member once; ZipFile checks CRC while we check manifest hashes."""
     with zipfile.ZipFile(path, "r") as archive:
         names = archive.namelist()
-        if len(names) != len(set(names)) or names.count(MANIFEST_NAME) != 1:
+        name_set = set(names)
+        if len(names) != len(name_set) or names.count(MANIFEST_NAME) != 1:
             raise ValueError("ZIP 条目重复或缺少 manifest.json")
         manifest = json.loads(archive.read(MANIFEST_NAME))
         if manifest.get("schema_version") != 1 or not isinstance(manifest.get("files"), list):
@@ -142,7 +143,7 @@ def verify_archive(path: Path) -> dict[str, object]:
             if not name or safe_path.is_absolute() or ".." in safe_path.parts or name in expected:
                 raise ValueError(f"清单路径无效或重复：{name}")
             expected.add(name)
-            if name not in names:
+            if name not in name_set:
                 raise ValueError(f"ZIP 缺少文件：{name}")
             digest = hashlib.sha256()
             count = 0
@@ -153,7 +154,7 @@ def verify_archive(path: Path) -> dict[str, object]:
             if count != entry["bytes"] or digest.hexdigest() != entry["sha256"]:
                 raise ValueError(f"清单校验失败：{name}")
             total_bytes += count
-        if set(names) != expected:
+        if name_set != expected:
             raise ValueError("ZIP 存在清单外的文件")
     return {
         "path": str(path.resolve()),

@@ -22,10 +22,14 @@ from typing import Any, Iterator
 from uuid import uuid4
 
 from quant_lab.baostock_source import read_baostock_historical_snapshot
+from quant_lab.analysis_timeline import build_analysis_timeline
 from quant_lab.algorithm_catalog import REGISTRY_VERSION as ALGORITHM_REGISTRY_VERSION, algorithm_catalog
 from quant_lab.action_reference import RULE_VERSION, build_action_reference
 from quant_lab.baostock_backfill import BACKFILL_VERSION
 from quant_lab.factor_library import factor_catalog
+from quant_lab.factor_store import FactorStore
+from quant_lab.daily_factors_v2 import factor_catalog_v2
+from quant_lab.daily_decision_rules_v2 import daily_rule_catalog_v2
 from quant_lab.feedback_loop import (append_feedback_case, list_case_reviews,
                                      list_feedback_cases, review_feedback_cases)
 from quant_lab.forecast_benchmark import read_benchmark_record
@@ -35,6 +39,7 @@ from quant_lab.group_behavior_pilot import read_group_behavior_record
 from quant_lab.north_star import POLICY_VERSION as NORTH_STAR_VERSION, score_backtest
 from quant_lab.optimizer import (append_optimization_record, list_optimization_records,
                                  optimize_focus_stocks)
+from quant_lab.paper_status import summarize_paper_pools
 from quant_lab.qlib_archive import QlibArchiveError
 from quant_lab.qlib_stock_report import analyze_qlib_stock
 from quant_lab.raw_data_inventory import INVENTORY_VERSION
@@ -72,6 +77,7 @@ class QuantAPIService:
     def __init__(self, store: MarketStore, report_dir: str | Path,
                  journal_dir: str | Path | None = None):
         self.store = ReadOnlyMarketStore(store.path)
+        self.factor_store = FactorStore(store.path.parent / "factors.sqlite3")
         self.report_dir = Path(report_dir)
         self.journal_dir = Path(journal_dir) if journal_dir is not None else self.report_dir.parent / "research-journal"
         self._archived_names: tuple[dict[str, str], str | None] | None = None
@@ -82,6 +88,13 @@ class QuantAPIService:
                                cost_price: float | None) -> dict[str, Any]:
         if report.get("status") not in ("ready", "partial_data"):
             return report
+        if report.get("instrument_id") and report.get("asof"):
+            try:
+                report["factor_insights"] = self.factor_store.analysis_insights(
+                    report["instrument_id"], asof=date.fromisoformat(report["asof"]))
+            except (OSError, sqlite3.DatabaseError):
+                report["factor_insights"] = []
+        report["analysis_timeline"] = build_analysis_timeline(report)
         report["decision"] = build_action_reference(report)
         chart = report.get("chart") if isinstance(report.get("chart"), dict) else {}
         forecast = chart.get("forecast") if isinstance(chart.get("forecast"), dict) else {}
@@ -1489,6 +1502,12 @@ class QuantAPIService:
             return {"status": "invalid_input", "reason": "复盘任务不接受附加参数。"}
         return self._start_task("review_cases")
 
+    def _factor_store_summary(self) -> dict[str, Any]:
+        try:
+            return self.factor_store.summary()
+        except (OSError, sqlite3.DatabaseError):
+            return {"status": "unavailable", "reason": "因子观测库暂不可读取。"}
+
     def console_status(self) -> dict[str, Any]:
         """A bounded, read-only view of published research and local operations."""
         run = self._read_json("run.json")
@@ -1571,8 +1590,10 @@ class QuantAPIService:
             "strategy_archive": strategy_archive,
             "strategies": list(strategies.values()),
             "algorithm_components": algorithm_catalog(self.report_dir.parent),
-            "factors": factor_catalog(),
+            "factors": factor_catalog() + factor_catalog_v2(),
+            "factor_store": self._factor_store_summary(),
             "experiments": experiments,
+            "paper_pools": summarize_paper_pools(self.report_dir.parent),
             "forecast_experiments": self._forecast_experiment_status(),
             "forecast_stability": self._forecast_stability_status(),
             "group_behavior_pilot": self._group_behavior_status(),
@@ -1588,7 +1609,11 @@ class QuantAPIService:
                 {"rule_id": SIGNAL_RULE_ID, "version": SIGNAL_RULE_VERSION,
                  "backtest_status": "not_evaluated",
                  "reason": "图表买卖标记只是历史信号，未单独模拟成交与收益。"},
-            ],
+            ] + [{"rule_id": item["rule_id"], "version": item["version"],
+                  "backtest_status": "not_evaluated", "reason": item["description"],
+                  "deployment_status": item["deployment_status"],
+                  "factor_ids": item["factor_ids"]}
+                 for item in daily_rule_catalog_v2()],
             "versions": {"decision_policy": RULE_VERSION, "chart": CHART_VERSION,
                          "stock_screen": SCREEN_VERSION, "backfill": BACKFILL_VERSION,
                          "north_star": NORTH_STAR_VERSION,

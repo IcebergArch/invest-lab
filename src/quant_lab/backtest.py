@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from quant_lab.cost_model import FEE_RATE_PER_SIDE
+
 import math
 from dataclasses import dataclass
 from datetime import date
@@ -24,53 +26,65 @@ class BacktestResult:
     metrics: Mapping[str, float]
 
 
+@dataclass(frozen=True)
+class DatedTarget:
+    decision_date: date
+    weights: Mapping[str, float]
+
+
+def run_backtest_targets(
+    name: str,
+    dates: Sequence[date],
+    close_panel: Mapping[str, Sequence[float]],
+    decisions: Sequence[DatedTarget],
+    cost_rate: float = FEE_RATE_PER_SIDE,
+) -> BacktestResult:
+    """Execute previously computed targets; the producer can be any strategy."""
+    _validate_inputs(dates, close_panel, cost_rate)
+    if len(decisions) != len(dates) - 1:
+        raise ValueError("one decision is required for each date before the last")
+    ids = sorted(close_panel)
+    targets = []
+    for index, decision in enumerate(decisions):
+        if decision.decision_date != dates[index]:
+            raise ValueError("decision date does not match market calendar")
+        targets.append(_normalize_weights(decision.weights, ids))
+    weights: dict[str, float] = {}
+    equity = 1.0
+    points = [BacktestPoint(dates[0], equity, 0.0, 0.0, {})]
+    for index in range(1, len(dates)):
+        previous_equity = equity
+        growth = {key: close_panel[key][index] / close_panel[key][index - 1] for key in ids}
+        gross_factor = 1.0 - sum(weights.values()) + sum(
+            weights.get(key, 0.0) * growth[key] for key in ids
+        )
+        equity *= gross_factor
+        pretrade = {key: weights[key] * growth[key] / gross_factor for key in weights}
+        turnover = _turnover(pretrade, targets[index - 1])
+        equity *= 1.0 - turnover * cost_rate
+        weights = targets[index - 1]
+        points.append(BacktestPoint(dates[index], equity,
+                                    equity / previous_equity - 1.0, turnover, dict(weights)))
+    return BacktestResult(name, points, calculate_metrics(points))
+
+
 def run_backtest(
     strategy: Strategy,
     dates: Sequence[date],
     close_panel: Mapping[str, Sequence[float]],
-    cost_rate: float = 0.001,
+    cost_rate: float = FEE_RATE_PER_SIDE,
 ) -> BacktestResult:
-    """Signal at close t; execute at close t+1; earn returns from t+1 onward.
-
-    Next-close execution is a daily-data proxy, not a claim about 10:30 fills.
-    """
+    """Adapt one strategy into dated targets, then use the generic evaluator."""
     _validate_inputs(dates, close_panel, cost_rate)
-
-    instrument_ids = sorted(close_panel)
-    history = {key: [values[0]] for key, values in close_panel.items()}
-    weights: dict[str, float] = {}
-    pending = _normalize_weights(strategy.weights(history), instrument_ids)
-    equity = 1.0
-    points = [BacktestPoint(dates[0], equity, 0.0, 0.0, {})]
-
-    for index in range(1, len(dates)):
-        previous_equity = equity
-        growth = {key: close_panel[key][index] / close_panel[key][index - 1] for key in instrument_ids}
-        gross_factor = 1.0 - sum(weights.values()) + sum(
-            weights.get(key, 0.0) * growth[key] for key in instrument_ids
-        )
-        equity *= gross_factor
-        pretrade = {
-            key: weights[key] * growth[key] / gross_factor
-            for key in weights
-        }
-        turnover = _turnover(pretrade, pending)
-        equity *= 1.0 - turnover * cost_rate
-        weights = pending
-        points.append(BacktestPoint(
-            dates[index], equity, equity / previous_equity - 1.0, turnover, dict(weights)
-        ))
-        for key in instrument_ids:
-            history[key].append(close_panel[key][index])
-        pending = _normalize_weights(strategy.weights(history), instrument_ids)
-
-    return BacktestResult(strategy.name, points, calculate_metrics(points))
-
+    decisions = [DatedTarget(dates[index], strategy.weights(
+        {key: values[:index + 1] for key, values in close_panel.items()}))
+        for index in range(len(dates) - 1)]
+    return run_backtest_targets(strategy.name, dates, close_panel, decisions, cost_rate)
 
 def run_buy_and_hold(
     dates: Sequence[date],
     close_panel: Mapping[str, Sequence[float]],
-    cost_rate: float = 0.001,
+    cost_rate: float = FEE_RATE_PER_SIDE,
     name: str = "equal-weight-buy-and-hold",
 ) -> BacktestResult:
     """Equal-weight entry at the second close, then hold without rebalancing.

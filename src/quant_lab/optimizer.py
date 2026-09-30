@@ -6,6 +6,8 @@ the stock pool and provider histories were not frozen at that boundary.
 """
 from __future__ import annotations
 
+from quant_lab.cost_model import FEE_RATE_PER_SIDE
+
 import hashlib
 import json
 import os
@@ -47,7 +49,7 @@ def optimize_panel(
     panel: CanonicalClosePanel,
     strategy_id: str,
     *,
-    cost_rate: float = 0.001,
+    cost_rate: float = FEE_RATE_PER_SIDE,
     train_fraction: float = 0.7,
 ) -> dict[str, Any]:
     """Select on chronological training data; never rank by holdout metrics."""
@@ -120,7 +122,7 @@ def optimize_panel(
 
 
 def optimize_focus_stocks(store: MarketStore, strategy_id: str,
-                          asof: date | None = None, cost_rate: float = 0.001
+                          asof: date | None = None, cost_rate: float = FEE_RATE_PER_SIDE
                           ) -> dict[str, Any]:
     instrument_ids = store.list_instrument_ids("focus_stock")
     if not instrument_ids:

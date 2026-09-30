@@ -252,21 +252,26 @@ def parse_eastmoney_kline(
 
 class TencentDailySource:
     endpoint = "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get"
+    raw_endpoint = "https://web.ifzq.gtimg.cn/appstock/app/kline/kline"
 
     def __init__(self, http: HttpJsonClient | None = None):
         self.http = http or HttpJsonClient(timeout=30.0, retries=2)
 
     def fetch(self, instrument: Instrument, start: date, end: date) -> list[DailyBar]:
+        if instrument.adjustment not in ("qfq", "none"):
+            raise ValueError(f"{instrument.instrument_id}: unsupported Tencent adjustment")
         symbol = self._symbol(instrument.provider_code)
+        row_key = "qfqday" if instrument.adjustment == "qfq" else "day"
         cursor_end = end
         collected: dict[date, DailyBar] = {}
         previous_earliest: date | None = None
         for _ in range(20):
             payload, payload_hash = self.http.get(
-                self.endpoint,
+                self.endpoint if instrument.adjustment == "qfq" else self.raw_endpoint,
                 {
                     "param": (
-                        f"{symbol},day,{start.isoformat()},{cursor_end.isoformat()},640,qfq"
+                        f"{symbol},day,{start.isoformat()},{cursor_end.isoformat()},640"
+                        + (",qfq" if instrument.adjustment == "qfq" else "")
                     )
                 },
             )
@@ -278,7 +283,11 @@ class TencentDailySource:
             container = data.get(symbol) if isinstance(data, dict) else None
             if not isinstance(container, dict):
                 raise ValueError(f"{instrument.instrument_id}: Tencent returned no data")
-            rows = container.get("qfqday") or container.get("day") or []
+            rows = container.get(row_key)
+            if not isinstance(rows, list):
+                raise ValueError(f"{instrument.instrument_id}: Tencent missing {row_key} for {instrument.adjustment} request")
+            if not rows and container.get("day" if row_key == "qfqday" else "qfqday"):
+                raise ValueError(f"{instrument.instrument_id}: Tencent empty {row_key} while another price basis has rows")
             if not rows:
                 break
             earliest = date.fromisoformat(str(rows[0][0]))

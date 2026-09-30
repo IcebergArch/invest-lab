@@ -9,19 +9,21 @@ import math
 from datetime import date
 from typing import Any, Sequence
 
-from quant_lab.forecast import EvaluationConfig, Momentum20Provider, evaluate_forecasts
+from quant_lab.forecast import EvaluationConfig, Momentum20Provider, RandomWalkProvider, evaluate_forecasts
+from quant_lab.typed_routing import classify_prices
 
 
-CHART_VERSION = "single-stock-chart-v1"
+CHART_VERSION = "single-stock-chart-v2"
 SIGNAL_RULE_ID = "sma-20-60-close-transition"
 SIGNAL_RULE_VERSION = "1"
-HISTORY_LIMIT = 120
+HISTORY_LIMIT = 1600
 FORECAST_STEPS = 20
 
 
 def _research_forecast(dates: Sequence[date], closes: Sequence[float],
                        instrument_id: str, price_basis: str) -> dict[str, Any]:
-    provider = Momentum20Provider()
+    route = classify_prices(closes)
+    provider = Momentum20Provider() if route["forecast_method"] == "momentum-20" else RandomWalkProvider()
     evaluation = evaluate_forecasts(
         dates, closes, provider, instrument_id,
         config=EvaluationConfig(horizons=(FORECAST_STEPS,), min_context=120, step=20),
@@ -34,6 +36,10 @@ def _research_forecast(dates: Sequence[date], closes: Sequence[float],
         "price_basis": price_basis,
         "model_id": provider.model_id,
         "model_version": provider.model_revision,
+        "router_version": route["router_version"],
+        "instrument_type": route["type"],
+        "activated_decision_method": route["decision_method"],
+        "route_factor_values": route["factor_values"],
         "asof": dates[-1].isoformat(),
         "horizon_trading_observations": FORECAST_STEPS,
         "validation": {
@@ -48,7 +54,7 @@ def _research_forecast(dates: Sequence[date], closes: Sequence[float],
             {"step": step, "median": value}
             for step, value in enumerate(projected.values, start=1)
         ],
-        "reason": "近 20 个交易观察点的增速外推，仅供比较；未通过独立时间外验证，不能作为买卖依据。",
+        "reason": "按截至基准日的标的类型选择预测方法；属于预设规则实验，未通过独立时间外验证。",
     }
 
 
